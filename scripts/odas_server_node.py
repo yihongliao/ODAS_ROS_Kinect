@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 import json
 import socket
@@ -257,7 +257,6 @@ class OdasServerNode:
                            "_configuration_path:=" + rospy.get_param('~configuration_path')]
 
         odas_core_process = subprocess.Popen(executable_args, cwd=os.curdir)
-
         rospy.spin()
 
         odas_core_process.terminate()

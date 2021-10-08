@@ -1,6 +1,6 @@
 <launch>
   <!-- Arguments -->
-  <arg name="configuration_path" default="$(find odas_ros)/config/configuration.cfg"/>
+  <arg name="configuration_path" default="$(find odas_ros)/config/azure.cfg"/>
   <arg name="frame_id" default="odas"/>
   <arg name="visualization" default="true"/>
   <arg name="rviz" default="false"/>
