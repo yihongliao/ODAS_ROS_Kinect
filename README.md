@@ -154,3 +154,9 @@ separated: { #packaging and destination of the separated files
  Note that if an interface type is set to "blackhole" and the format to "undefined", the associated topic won't be published.
  
  The current configuration file ('azure.cfg') establishing at connection with the pocketsphinx node through a socket to receive the audio data. It then takes the data from SSL, SST, and SSS and streams it via socket to ODAS Web (https://github.com/introlab/odas_web)
+ 
+ ### Launching
+ First make sure the pocketsphinx node is running 
+```
+roslaunch odas_ros odas.launch 
+```
