@@ -56,19 +56,18 @@ In the cloned directory of `odas_ros`, run this line to install all submodules:
 git submodule update --init --recursive
 ```
 
+If this does not install the correct modules, you can hard install the orginal ODAS library into your catkin workspace:
+- Navigate to the main ODAS (non-ROS version) library (https://github.com/introlab/odas/tree/2ed307ba22403f96260d8741cbb568a87cf647a0) 
+- Download ZIP files 
+- Unzip folders to your catkin workspace (inside odas_ros/src)
+
 ## Hardware configuration
-For ODAS to locate and track sound sources, it needs to be configured. There is a file (`configuration.cfg`) that is used to provide ODAS with all the information it needs. You will need the position and direction of each microphones. See [ODAS Configuration](https://github.com/introlab/odas/wiki/Configuration) for details.
+For ODAS to locate and track sound sources, it needs to be configured. There is a file (`configuration.cfg`) that is used to provide ODAS with all the information it needs. 
+
+The configuration in this repository is configured for the Microsoft Azure Kinect DK Sensor using the file ('azure.cfg'). However, you might need to change the device name if running on a new machine. 
 
 Here are the important steps:
 
-### Sound card configuration
-At this part of the configuration file, you need to set the correct card and device number.
-```
-# Input with raw signal from microphones
-    interface: {    #"arecord -l" OR "aplay --list-devices" to see the devices
-        type = "soundcard_name";
-        devicename = "hw:CARD=1,DEV=0";
-```
 To know what is your card number, plug it in your computer and run `arecord -l` in a terminal. The output should look something like this:
 ```
 **** List of CAPTURE Hardware Devices ****
@@ -81,36 +80,13 @@ card 1: 8_sounds_usb [16SoundsUSB Audio 2.0], device 0: USB Audio [USB Audio]
 ```
 In this case, the card number is 1 and the device is 0 for the 16SoundsUSB audio card. So the device name should be: `"hw:CARD=1,DEV=0";`.
 
-### Mapping 
-Depending on your configuration, you will need to map the microphones from the soundcard to the software. If you wish to use all microphones, then you can map all of them. For example, if there is 16 microphones and wish to use them all:
+At this part of the configuration file, you need to set the correct card and device number.
 ```
-mapping:
-{
-    map: (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16);
-};
+# Input with raw signal from microphones
+    interface: {    #"arecord -l" OR "aplay --list-devices" to see the devices
+        type = "soundcard_name";
+        devicename = "hw:CARD=1,DEV=0";
 ```
-But if only certain microphones should be used, they can be mapped. For example, if I only wish to use microphones 1 to 4 and 6 to 10 and 12:
-```
-mapping:
-{
-    map: (1,2,3,4,6,7,8,9,10,12);
-};
-```
-They will be mapped to microphones 1 to 10.
-
-### Microphone configuration
-For ODAS to precisely locate and track a sound source, it needs to know precisely the microphone position. The frame of reference used to measure the microphones position will end up being the one used for the sound tracking. Here is an example of a microphone configuration. It is easier if the reference point is located in the center of the microphones.
-```
-# Microphone 1 #TODO
-        {
-            mu = ( 0.122376, 0.08144437, 0.042 );
-            sigma2 = ( +1E-6, 0.0, 0.0, 0.0, +1E-6, 0.0, 0.0, 0.0, +1E-6 );
-            direction = ( -0.08144, -0.12238, 0.0 );
-            angle = ( 80.0, 100.0 );
-        },
-```
-
-For Microphone 1, `mu` is the position in x, y and z from the reference point. `sigma2` is the position variance in `xx, xy xz, yx, yy, yz, zx, zy, zz` this setting should mainly remain untouched. The `direction` parameter is the direction of the microphone. It should be a unit vector pointing in the direction that the microphone is pointing relative to the reference frame. The `angle` parameter is the maximum angle at which gain is 1 and minimum angle at which gain is 0. 
 
 ### Sound Source Localization, Tracking and Separation
 ODAS can output the sound source localization, the source source tracking and the sound source separation:
@@ -177,21 +153,4 @@ separated: { #packaging and destination of the separated files
  
  Note that if an interface type is set to "blackhole" and the format to "undefined", the associated topic won't be published.
  
- ### Sound Source Tracking Threshold adjustment
- The default configuration file should be correct for most configuration. However, if the Sound Source Tracking does not work (i.e. the published topic `/odas/sst` does not contain any sources or the sources are indesirable) it may be because the threshold is not set correctly. 
- 
- In the Source Source Tracking section of the configuration file, there is a section with `active` and `inactive`:
- ```
- # Parameters used by both the Kalman and particle filter
-
-    active = (
-        { weight = 1.0; mu = 0.3; sigma2 = 0.0025 }
-    );
-
-    inactive = (
-        { weight = 1.0; mu = 0.15; sigma2 = 0.0025 }
-    );
- ```
- The `active` parameter represents the limit to consider a sound source active (high limit) and the`inactive` parameter is the lower limit at which a sound source is considered inactive. 
-* If `mu` is too high in the `active` and `inactive` parameters, few sound sources will be considered like active. 
-* If `mu` in the `active` and `inactive` parameters are set too low, too much sound sources will be considered active.
+ The current configuration file ('azure.cfg') establishing at connection with the pocketsphinx node through a socket to receive the audio data. It then takes the data from SSL, SST, and SSS and streams it via socket to ODAS Web (https://github.com/introlab/odas_web)
