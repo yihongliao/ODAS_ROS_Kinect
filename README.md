@@ -56,7 +56,7 @@ In the cloned directory of `odas_ros`, run this line to install all submodules:
 git submodule update --init --recursive
 ```
 
-If this does not install the correct modules, you can hard install the orginal ODAS library into your catkin workspace:
+If this does not install the correct submodules, you can hard install the orginal ODAS library into your catkin workspace:
 - Navigate to the main ODAS (non-ROS version) library (https://github.com/introlab/odas/tree/2ed307ba22403f96260d8741cbb568a87cf647a0) 
 - Download ZIP files 
 - Unzip folders to your catkin workspace (inside odas_ros/src)
