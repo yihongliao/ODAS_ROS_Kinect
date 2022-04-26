@@ -49,7 +49,7 @@ add_compile_options(-std=c++14)
 ## Installation
 First, you need to clone the repository in your catkin workspace.
 ```
-git clone https://github.com/introlab/odas_ros.git
+git clone https://github.com/XYZT-Autonomous-Vehicle/odas_ros
 ```
 In the cloned directory of `odas_ros`, run this line to install all submodules:
 ```
@@ -64,7 +64,12 @@ If this does not install the correct submodules, you can hard install the orgina
 ## Hardware configuration
 For ODAS to locate and track sound sources, it needs to be configured. There is a file (`configuration.cfg`) that is used to provide ODAS with all the information it needs. 
 
-The configuration in this repository is configured for the Microsoft Azure Kinect DK Sensor using the file ('azure.cfg'). However, you might need to change the device name if running on a new machine. 
+For the Microsoft Azure Kinect DK Sensor, use the file ('azure_local.cfg'). For remote users, use ('azure.cfg').
+
+To use rviz for visualization, please set odas.launch rviz argument to 'true'
+
+<arg name="rviz" default="true"/> 
+
 
 Here are the important steps:
 

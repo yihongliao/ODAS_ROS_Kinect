@@ -3,7 +3,7 @@
   <arg name="configuration_path" default="$(find odas_ros)/config/azure.cfg"/>
   <arg name="frame_id" default="odas"/>
   <arg name="visualization" default="true"/>
-  <arg name="rviz" default="false"/>
+  <arg name="rviz" default="true"/>
   <arg name="rviz_cfg" default="-d $(find odas_ros)/config/rviz/odas_rviz.rviz"/>
   <arg name="local" default="true" />
 
